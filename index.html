@@ -8,21 +8,39 @@
 </head>
 <body>
     <header>
-        <button id="add-project-btn">Add Project</button>
+        <div id="save-load">
+            <button id="view-key" class="key-button">View current load key</button>
+            <button id="new-save" class="key-button">New save</button>
+            <button id="save-key" class="key-button">Save to load key</button>
+            <button id="change-key" class="key-button">Load a key</button>
+        </div>
+        <button id="add-project-btn" class="key-button">Add Project</button>
     </header>
     <main>
-        <section id="stall" class="project-section">
+        <div class="project-section-div stall">
             <h2>Stall</h2>
-        </section>
-        <section id="future" class="project-section">
+            <section id="stall" class="project-section">
+            
+            </section>
+        </div>
+        <div class="project-section-div future">
             <h2>Future</h2>
-        </section>
-        <section id="present" class="project-section">
+            <section id="future" class="project-section">
+            
+            </section>
+        </div>
+        <div class="project-section-div present">
             <h2>Present</h2>
-        </section>
-        <section id="past" class="project-section">
+            <section id="present" class="project-section">
+                
+            </section>
+        </div>
+        <div class="project-section-div past">
             <h2>Past</h2>
-        </section>
+            <section id="past" class="project-section">
+            
+            </section>
+        </div>
     </main>
 
     <!-- Modal for project details -->
@@ -40,16 +58,16 @@
                 <h3>Issues</h3>
                 <button id="add-issue-btn">Add Issue</button>
                 <div id="issue-sections">
-                    <div id="stall-issues" class="issue-section">
+                    <div id="stall-issues" class="issue-section stall">
                         <h4>Stall</h4>
                     </div>
-                    <div id="future-issues" class="issue-section">
+                    <div id="future-issues" class="issue-section future">
                         <h4>Future</h4>
                     </div>
-                    <div id="present-issues" class="issue-section">
+                    <div id="present-issues" class="issue-section present">
                         <h4>Present</h4>
                     </div>
-                    <div id="past-issues" class="issue-section">
+                    <div id="past-issues" class="issue-section past">
                         <h4>Past</h4>
                     </div>
                 </div>
@@ -66,6 +84,28 @@
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <!-- Include Firebase SDK -->
+<!-- <script src="https://www.gstatic.com/firebasejs/9.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.10.0/firebase-firestore.js"></script> -->
+
+<!-- <script>
+  // Your Firebase configuration from the console
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_PROJECT_ID.appspot.com",
+    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+    appId: "YOUR_APP_ID"
+  };
+
+  // Initialize Firebase
+  const app = firebase.initializeApp(firebaseConfig);
+
+  // Initialize Firestore
+  const db = firebase.firestore();
+</script> -->
+
+    <script type="module" src="script.js"></script>
 </body>
 </html>
