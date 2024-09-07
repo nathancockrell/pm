@@ -83,11 +83,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         if(loginKey){
             alert("Current login key: "+loginKey);
         } else{
-            alert("No current load key. Data is stored to device browser.")
+            alert("No current login key. Data is stored to device browser.")
         }  
     })
     document.getElementById("load-key").addEventListener("click", function(){
-        const key = prompt("Enter your login key, or a new one.");
+        const key = prompt("Enter login key");
     if(key){
         const params = new URLSearchParams();
         params.append('key', key);
@@ -116,7 +116,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     projectDiv.className = 'project';
                     projectDiv.innerHTML = `
                         <p class="project-name">${project.name}</p>
-                        <button class="move-btn">Move</button>
+                        <button class="move-btn">⋮</button>
                     `;
                     projectDiv.querySelector('.move-btn').addEventListener('click', (e) => {
                         e.stopPropagation();
@@ -153,6 +153,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     function showProjectDetails(id) {
+        const sects = document.querySelectorAll(".project-section")
+            sects.forEach((sect)=>{
+                sect.classList.add("hide-overflow")
+            })
+        document.querySelector("body").classList.add("hide-overflow")
         currentProjectId = id;
         const project = projects[id];
         const modal = document.getElementById('project-modal');
@@ -163,6 +168,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         modal.style.display = 'block';
 
         document.querySelector('.close-btn').onclick = () => {
+            const sects = document.querySelectorAll(".project-section")
+            sects.forEach((sect)=>{
+                sect.classList.remove("hide-overflow")
+            })
+            document.querySelector("body").classList.remove("hide-overflow")
             modal.style.display = 'none';
         };
 
@@ -209,7 +219,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     issueDiv.className = 'issue';
                     issueDiv.innerHTML = `
                         ${issue.name}
-                        <button class="move-issue-btn">Move</button>
+                        <button class="move-issue-btn">⋮</button>
                     `;
                     issueDiv.querySelector('.move-issue-btn').addEventListener('click', (e) => {
                         e.stopPropagation();
@@ -241,9 +251,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     function showIssueDetails(id) {
+        const sects = document.querySelectorAll(".issue-section");
+            sects.forEach((sect)=>{
+                sect.classList.add("hide-overflow")
+            })
+        document.getElementById("project-modal").classList.add("hide-overflow");
         const issue = projects[currentProjectId].issues.find(issue => issue.id === id);
         const modal = document.getElementById('issue-modal');
         document.getElementById('issue-name').textContent = issue.name;
+        document.getElementById('issue-date').textContent = issue.date.slice(0,19)
+
         const descriptionTextarea = document.getElementById('issue-description');
         descriptionTextarea.value = issue.description;
 
@@ -257,6 +274,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         document.querySelector('.close-issue').onclick = () => {
             modal.style.display = 'none';
+            const sects = document.querySelectorAll(".issue-section");
+            sects.forEach((sect)=>{
+                sect.classList.remove("hide-overflow")
+            })
+            document.getElementById("project-modal").classList.remove("hide-overflow");
         };
     }
 

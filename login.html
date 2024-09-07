@@ -5,24 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="login.css">
 </head>
 <body>
-    <header>
-        
-    </header>
-    <h1>THIS IS THE LOGIN PAGE</h1>
+    <div class="container">
+        <h1>Login</h1>
     <form action="" id="login">
         <label for="login">Enter Login Code</label>
         <input name="login" type="text" id="code-input">
-        <label for="checkbox">Stay logged in</label>
-        <input type="checkbox" name="checkbox" id="checkbox">
+        <div>
+            <label for="checkbox">Stay logged in?</label>
+            <input type="checkbox" name="checkbox" id="checkbox">
+        </div>
         <button type="submit">Login</button>
     </form>
     <p>or</p>
     <a href="./"><button id="guest">Use as guest</button></a>
-
+    <hr>
     <h1>ABOUT PM</h1>
-    <p>lorem ipsum dolor</p>
+    <p>I hope you like this site</p>
+    </div>
 
     <script type="module" src="script.js"></script>
 </body>

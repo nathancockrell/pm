@@ -35,7 +35,7 @@ if(key){
                     projectDiv.className = 'project';
                     projectDiv.innerHTML = `
                         <p class="project-name">${project.name}</p>
-                        <button class="move-btn">Move</button>
+                        <button class="move-btn">⋮</button>
                     `;
                     projectDiv.querySelector('.move-btn').addEventListener('click', (e) => {
                         e.stopPropagation();
@@ -76,6 +76,10 @@ if(key){
     }
 
     function showProjectDetails(id) {
+        const sects = document.querySelectorAll(".project-section")
+            sects.forEach((sect)=>{
+                sect.classList.add("hide-overflow")
+            })
         currentProjectId = id;
         const project = projects[id];
         const modal = document.getElementById('project-modal');
@@ -86,6 +90,10 @@ if(key){
         modal.style.display = 'block';
 
         document.querySelector('.close-btn').onclick = () => {
+            const sects = document.querySelectorAll(".project-section")
+            sects.forEach((sect)=>{
+                sect.classList.remove("hide-overflow")
+            })
             modal.style.display = 'none';
         };
 
@@ -132,7 +140,7 @@ if(key){
                     issueDiv.className = 'issue';
                     issueDiv.innerHTML = `
                         ${issue.name}
-                        <button class="move-issue-btn">Move</button>
+                        <button class="move-issue-btn">⋮</button>
                     `;
                     issueDiv.querySelector('.move-issue-btn').addEventListener('click', (e) => {
                         e.stopPropagation();
@@ -164,9 +172,15 @@ if(key){
     }
 
     function showIssueDetails(id) {
+        const sects = document.querySelectorAll(".issue-section");
+            sects.forEach((sect)=>{
+                sect.classList.add("hide-overflow")
+            })
+        document.getElementById("project-modal").classList.add("hide-overflow");
         const issue = projects[currentProjectId].issues.find(issue => issue.id === id);
         const modal = document.getElementById('issue-modal');
         document.getElementById('issue-name').textContent = issue.name;
+        document.getElementById('issue-date').textContent = issue.date.slice(0,19)
         const descriptionTextarea = document.getElementById('issue-description');
         descriptionTextarea.value = issue.description;
 
@@ -180,6 +194,11 @@ if(key){
 
         document.querySelector('.close-issue').onclick = () => {
             modal.style.display = 'none';
+            const sects = document.querySelectorAll(".issue-section");
+            sects.forEach((sect)=>{
+                sect.classList.remove("hide-overflow")
+            })
+            document.getElementById("project-modal").classList.remove("hide-overflow");
         };
     }
 
