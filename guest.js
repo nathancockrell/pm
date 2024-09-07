@@ -4,6 +4,15 @@ function saveData(projects) {
 }
 document.addEventListener('DOMContentLoaded', async () => {
 
+    let key = localStorage.getItem("saveKey") || "";
+    console.log(key)
+if(key){
+    const params = new URLSearchParams();
+    params.append('key', key);
+    const queryString = params.toString();
+    window.location.href=`./board.html?${btoa(queryString)}`
+}
+
     const sections = ['stall', 'future', 'present', 'past'];
 
     const unprocessed = localStorage.getItem("projects")
