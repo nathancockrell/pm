@@ -165,7 +165,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('resource-list').innerHTML = project.resources.map(resource => `<li>${resource}</li>`).join('');
         updateIssueSections();
 
-        modal.style.display = 'block';
+        modal.style.display = 'flex';
 
         document.querySelector('.close-btn').onclick = () => {
             const sects = document.querySelectorAll(".project-section")
@@ -270,7 +270,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             saveData(loginKey, projects);
         });
 
-        modal.style.display = 'block';
+        modal.style.display = 'flex';
 
         document.querySelector('.close-issue').onclick = () => {
             modal.style.display = 'none';

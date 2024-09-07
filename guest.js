@@ -87,7 +87,7 @@ if(key){
         document.getElementById('resource-list').innerHTML = project.resources.map(resource => `<li>${resource}</li>`).join('');
         updateIssueSections();
 
-        modal.style.display = 'block';
+        modal.style.display = 'flex';
 
         document.querySelector('.close-btn').onclick = () => {
             const sects = document.querySelectorAll(".project-section")
@@ -190,7 +190,7 @@ if(key){
             saveData(projects);
         });
 
-        modal.style.display = 'block';
+        modal.style.display = 'flex';
 
         document.querySelector('.close-issue').onclick = () => {
             modal.style.display = 'none';
