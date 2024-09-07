@@ -99,7 +99,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
     });
     document.getElementById("use-guest").addEventListener("click", ()=>{
-        window.location.href="./guest.html"
+        localStorage.setItem("saveKey", "")
+        window.location.href="./"
     })
 
     

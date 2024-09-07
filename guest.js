@@ -6,7 +6,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const sections = ['stall', 'future', 'present', 'past'];
 
-    let projects=JSON.parse(localStorage.getItem("projects")) || {};
+    const unprocessed = localStorage.getItem("projects")
+    let projects
+    if(unprocessed){
+        projects = JSON.parse(unprocessed)
+    }else{
+        projects = {}
+    }
+    
     let currentProjectId = null;
     
     function renderProjects() {
