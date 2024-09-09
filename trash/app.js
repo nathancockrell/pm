@@ -1,114 +1,14 @@
-// Import Firebase and Firestore modules
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-app.js";
-import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-firestore.js";
-
-
-console.log(window.location.href)
-// Your Firebase configuration
-const firebaseConfig = {
-    apiKey: "AIzaSyD_LXeId89txDwnvZuEeFBzC1rkgZB3bbY",
-    authDomain: "projectm-894b9.firebaseapp.com",
-    projectId: "projectm-894b9",
-    storageBucket: "projectm-894b9.appspot.com",
-    messagingSenderId: "467678578464",
-    appId: "1:467678578464:web:a9ac1f80a868e17b8e3945",
-    measurementId: "G-F5Q8CQ38NG"
-  };
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-
-// Initialize Firestore
-const db = getFirestore(app);
-let projects ={};
-
-let queryURL=window.location.search;
-queryURL=queryURL.slice(1);
-queryURL=atob(queryURL)
-const URLParams = new URLSearchParams(queryURL)
-
-let loginKey = URLParams.get("key") || "";
-if(loginKey==""){
-    window.location.href="./"
-}
-
-// Save data function
-async function saveData(loginKey, data) {
-    try {
-      // Ensure that `loginKey` is a valid document ID
-      if (!loginKey) {
-        
-        throw new Error("Invalid loginKey");
-      }
-      await setDoc(doc(db, "users", loginKey), {
-        toolsData: data
-      });
-      console.log("Autosaved to current loginkey");
-    } catch (e) {
-      console.log("Error writing document: ", e);
-    }
-  }
-  
-  // Load data function
-  async function loadData(loginKey) {
-    if (!loginKey) {
-      console.log("Invalid loginKey");
-      return;
-    }
-    const docRef = doc(db, "users", loginKey);
-    const docSnap = await getDoc(docRef);
-  
-    if (docSnap.exists()) {
-      console.log("Document data:", docSnap.data());
-      return docSnap.data().toolsData;
-    } else {
-      console.log("No such document!");
-    }
-  }
-
-
-
-document.addEventListener('DOMContentLoaded', async () => {
+export default function startApp(){
     const sections = ['stall', 'future', 'present', 'past'];
     
-    if(!loginKey){
-        console.log(true)
-    }else{
-        console.log(false);
-    }
-    projects = await loadData(loginKey) || {};
     let currentProjectId = null;
 
-    document.getElementById("view-key").addEventListener("click", function(){
-        if(loginKey){
-            alert("Current login key: "+loginKey);
-        } else{
-            alert("No current login key. Data is stored to device browser.")
-        }  
-    })
-    document.getElementById("load-key").addEventListener("click", function(){
-        const key = prompt("Enter login key");
-    if(key){
-        const params = new URLSearchParams();
-        params.append('key', key);
-        const queryString = params.toString();
-        // btoa(queryString)
-        window.location.href=`./board.html?${btoa(queryString)}`
-    }else{
-        // alert("no key entered")
-    }
-    });
-    document.getElementById("use-guest").addEventListener("click", ()=>{
-        localStorage.setItem("saveKey", "")
-        window.location.href="./"
-    })
-
-    
     function renderProjects() {
         sections.forEach(sectionId => {
             const section = document.getElementById(sectionId);
             section.innerHTML=''
             // section.innerHTML = `<h2>${capitalize(sectionId)}</h2>`;
+            console.log(projects)
             Object.entries(projects).forEach(([id, project]) => {
                 if (project.section === sectionId) {
                     
@@ -120,7 +20,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     `;
                     projectDiv.querySelector('.move-btn').addEventListener('click', (e) => {
                         e.stopPropagation();
-                        moveProject(id);
+                        manageProject(id);
                     });
                     projectDiv.addEventListener('click', () => showProjectDetails(id));
                     section.appendChild(projectDiv);
@@ -140,15 +40,19 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    function moveProject(id) {
-        const newSection = prompt('Enter new section (stall, future, present, past):');
-        if (sections.includes(newSection)) {
-            projects[id].section = newSection;
+    function manageProject(id) {
+        const input = prompt("Enter new section (stall, future, present, past) OR 'delete'");
+        if (sections.includes(input)) {
+            projects[id].section = input;
             // localStorage.setItem('projects', JSON.stringify(projects));
             saveData(loginKey, projects);
             renderProjects();
+        }else if(input=="delete"){
+            Reflect.deleteProperty(projects,id);
+            saveData(loginKey, projects)
+            renderProjects();
         } else {
-            alert('Invalid section name.');
+            // alert('Invalid section name.');
         }
     }
 
@@ -223,7 +127,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     `;
                     issueDiv.querySelector('.move-issue-btn').addEventListener('click', (e) => {
                         e.stopPropagation();
-                        moveIssue(issue.id);
+                        manageIssue(issue.id);
                     });
                     issueDiv.addEventListener('click', () => showIssueDetails(issue.id));
                     section.appendChild(issueDiv);
@@ -232,8 +136,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
-    function moveIssue(id) {
-        const newSection = prompt('Enter new section (stall, future, present, past):');
+    function manageIssue(id) {
+        const newSection = prompt("Enter new section (stall, future, present, past) OR 'delete'");
         if (sections.includes(newSection)) {
             const issue = projects[currentProjectId].issues.find(issue => issue.id === id);
             issue.section = newSection;
@@ -245,8 +149,15 @@ document.addEventListener('DOMContentLoaded', async () => {
             // localStorage.setItem('projects', JSON.stringify(projects));
             saveData(loginKey, projects);
             showProjectDetails(currentProjectId);  // Refresh the project details
-        } else {
-            alert('Invalid section name.');
+        }else if(newSection=="delete"){
+            const issue = projects[currentProjectId].issues.find(issue => issue.id === id);
+            projects[currentProjectId].issues=projects[currentProjectId].issues.filter((iss) =>iss.name!==issue.name)
+            saveData(loginKey, projects);
+            showProjectDetails(currentProjectId);
+            
+        }   
+        else {
+            // alert('Invalid section name.');
         }
     }
 
@@ -284,9 +195,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     document.getElementById('add-project-btn').addEventListener('click', addProject);
     renderProjects();
-});
+}
 
+// document.addEventListener('DOMContentLoaded', async ()=> {
+//     startApp();
+// });
 function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
-

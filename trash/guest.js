@@ -1,27 +1,7 @@
-function saveData(projects) {
-    
-    localStorage.setItem('projects', JSON.stringify(projects));
-}
+
 document.addEventListener('DOMContentLoaded', async () => {
-
-    let key = localStorage.getItem("saveKey") || "";
-    console.log(key)
-if(key){
-    const params = new URLSearchParams();
-    params.append('key', key);
-    const queryString = params.toString();
-    window.location.href=`./board.html?${btoa(queryString)}`
-}
-
+    
     const sections = ['stall', 'future', 'present', 'past'];
-
-    const unprocessed = localStorage.getItem("projects")
-    let projects
-    if(unprocessed){
-        projects = JSON.parse(unprocessed)
-    }else{
-        projects = {}
-    }
     
     let currentProjectId = null;
     
@@ -39,7 +19,7 @@ if(key){
                     `;
                     projectDiv.querySelector('.move-btn').addEventListener('click', (e) => {
                         e.stopPropagation();
-                        moveProject(id);
+                        manageProject(id);
                     });
                     projectDiv.addEventListener('click', () => showProjectDetails(id));
                     section.appendChild(projectDiv);
@@ -58,20 +38,24 @@ if(key){
             projects[id] = { name, section: 'stall', resources: [], issues: [] };
             
             // localStorage.setItem('projects', JSON.stringify(projects));
-            saveData(projects);
+            saveData(loginKey, projects);
             renderProjects();
         }
     }
 
-    function moveProject(id) {
-        const newSection = prompt('Enter new section (stall, future, present, past):');
-        if (sections.includes(newSection)) {
-            projects[id].section = newSection;
+    function manageProject(id) {
+        const input = prompt("Enter new section (stall, future, present, past) OR 'delete'");
+        if (sections.includes(input)) {
+            projects[id].section = input;
             // localStorage.setItem('projects', JSON.stringify(projects));
-            saveData(projects);
+            saveData(loginKey, projects);
+            renderProjects();
+        }else if(input=="delete"){
+            Reflect.deleteProperty(projects,id);
+            saveData(loginKey, projects)
             renderProjects();
         } else {
-            alert('Invalid section name.');
+            // alert('Invalid section name.');
         }
     }
 
@@ -106,7 +90,7 @@ if(key){
         if (resource) {
             projects[currentProjectId].resources.push(resource);
             // localStorage.setItem('projects', JSON.stringify(projects));
-            saveData(projects);
+            saveData(loginKey, projects);
             document.getElementById('resource-textarea').value = '';
             showProjectDetails(currentProjectId);  // Refresh the project details
         }
@@ -125,7 +109,7 @@ if(key){
                 history: []
             });
             // localStorage.setItem('projects', JSON.stringify(projects));
-            saveData(projects);
+            saveData(loginKey, projects);
             showProjectDetails(currentProjectId);  // Refresh the project details
         }
     }
@@ -144,7 +128,7 @@ if(key){
                     `;
                     issueDiv.querySelector('.move-issue-btn').addEventListener('click', (e) => {
                         e.stopPropagation();
-                        moveIssue(issue.id);
+                        manageIssue(issue.id);
                     });
                     issueDiv.addEventListener('click', () => showIssueDetails(issue.id));
                     section.appendChild(issueDiv);
@@ -153,8 +137,8 @@ if(key){
         });
     }
 
-    function moveIssue(id) {
-        const newSection = prompt('Enter new section (stall, future, present, past):');
+    function manageIssue(id) {
+        const newSection = prompt("Enter new section (stall, future, present, past) OR 'delete'");
         if (sections.includes(newSection)) {
             const issue = projects[currentProjectId].issues.find(issue => issue.id === id);
             issue.section = newSection;
@@ -164,10 +148,17 @@ if(key){
             });
             
             // localStorage.setItem('projects', JSON.stringify(projects));
-            saveData(projects);
+            saveData(loginKey, projects);
             showProjectDetails(currentProjectId);  // Refresh the project details
-        } else {
-            alert('Invalid section name.');
+        }else if(newSection=="delete"){
+            const issue = projects[currentProjectId].issues.find(issue => issue.id === id);
+            projects[currentProjectId].issues=projects[currentProjectId].issues.filter((iss) =>iss.name!==issue.name)
+            saveData(loginKey, projects);
+            showProjectDetails(currentProjectId);
+            
+        }   
+        else {
+            // alert('Invalid section name.');
         }
     }
 
@@ -187,7 +178,7 @@ if(key){
         descriptionTextarea.addEventListener('input', () => {
             issue.description = descriptionTextarea.value;
             // localStorage.setItem('projects', JSON.stringify(projects));
-            saveData(projects);
+            saveData(loginKey, projects);
         });
 
         modal.style.display = 'flex';
@@ -209,4 +200,3 @@ if(key){
 function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
-
