@@ -1,6 +1,6 @@
 export default class Board {
     constructor(projects, loginKey, saveData){
-        this.sections = ['stall', 'future', 'present', 'past'];
+        this.sections = ['stall', 'todo', 'doing', 'done'];
         this.projects = projects;
         this.loginKey=loginKey;
         this.currentProjectId = null;
@@ -48,14 +48,14 @@ export default class Board {
         }
     
         manageProject(id) {
-            const input = prompt("Enter new section (stall, future, present, past) OR 'delete'");
+            const input = prompt("Enter name of new section OR 'delete'");
             if (this.sections.includes(input)) {
                 this.projects[id].section = input;
                 // localStorage.setItem('projects', JSON.stringify(projects));
                 this.saveData(this.loginKey, this.projects);
                 this.renderProjects();
             }else if(input=="delete"){
-                Reflect.deleteProperty(projects,id);
+                Reflect.deleteProperty(this.projects,id);
                 this.saveData(this.loginKey, this.projects)
                 this.renderProjects();
             } else {
@@ -144,7 +144,7 @@ export default class Board {
         }
     
         manageIssue(id) {
-            const newSection = prompt("Enter new section (stall, future, present, past) OR 'delete'");
+            const newSection = prompt("Enter name of new section OR 'delete'");
             if (this.sections.includes(newSection)) {
                 const issue = this.projects[this.currentProjectId].issues.find(issue => issue.id === id);
                 issue.section = newSection;

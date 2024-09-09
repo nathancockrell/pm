@@ -2,16 +2,33 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
+    background-color: #CAF4FF;
 }
 
 header {
     background: #f4f4f4;
-    padding: 10px;
+    /* padding: 10px; */
     text-align: center;
+}
+#save-load {
+    display: flex;
+    /* align-items: end; */
+    justify-content: right;
+    background-color: #5AB2FF;
+    padding:5px;
+}
+.add-proj {
+    padding:10px;
+    background-color: #CAF4FF;
+}
+#pfp {
+    width: 20px;
+    height: 20px;
 }
 
 button {
-    cursor:pointer
+    cursor:pointer;
+    font-size: 16px;
 }
 
 #add-project-btn {
@@ -30,31 +47,31 @@ main {
 .project-section {
     width: 100%;
     max-height: 85%;
-    overflow-y: scroll;
+    overflow-y: auto;
     
 }
 .project-section-div{
     background: #eaeaea;
-    border: 1px solid #ccc;
-    padding: 3px;
+    /* border: 1px solid #ccc; */
+    padding: 7px;
     box-sizing: border-box;
     max-height: 70vh;
     overflow-y: hidden;
     width: 25%;
-    min-width: 320px;
+    min-width: 290px;
     /* width: 22%; */
 }
 .stall{
-    background: #eaeaea;
+    background: #a4a4a4;
 }
-.future{
-    background: rgb(255, 240, 240);
+.todo{
+    background: #E76F51;
 }
-.present{
-    background: rgb(254, 255, 240);
+.doing{
+    background: #E9C46A;
 }
-.past{
-    background: rgb(240, 255, 240);
+.done{
+    background: #36BA98;
 }
 
 .project {
@@ -90,12 +107,11 @@ main {
 
 .issue-section {
     /* background: #eaeaea; */
-    border: 1px solid #ccc;
     padding: 10px;
     box-sizing: border-box;
-    overflow-y: scroll;
+    overflow-y: auto;
     width: 25%;
-    min-width: 320px;
+    min-width: 290px;
     max-height: 80vh;
 }
 
@@ -123,11 +139,11 @@ main {
     /* padding-top:1rem; */
     height: 100%;
     max-height: 100vh;
-    overflow-y: scroll;
+    overflow-y: auto;
     background: #fff;
     padding: 20px;
     border-radius: 5px;
-    width: 90%;
+    width: 97%;
     /* margin-bottom: 2rem; */
     padding-bottom: 2rem;
     
@@ -155,9 +171,6 @@ textarea {
     width: 300px;
 }
 
-#header-header {
-    background-color: #eaeaea;
-}
 .hide-overflow{
     overflow: hidden !important;
 }
@@ -166,4 +179,23 @@ textarea {
 .issue:hover {
     /* background-color: rgb(245, 245, 245); */
     border:1px solid rgb(133, 133, 133)
+}
+
+@media screen and (max-width:579px){
+    .project-section-div,
+    .issue-section{
+        width:100%;
+    }
+}
+@media screen and (max-width:870px) and (min-width:580px){
+    .project-section-div,
+    .issue-section{
+        width:50%;
+    }
+}
+@media screen and (max-width:1160px) and (min-width:870px){
+    .project-section-div,
+    .issue-section{
+        width:33%;
+    }
 }
