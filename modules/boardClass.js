@@ -33,6 +33,7 @@ export default class Board {
                     }
                 });
             });
+            this.updateStats();
         }
     
         addProject() {
@@ -198,6 +199,24 @@ export default class Board {
                 })
                 document.getElementById("project-modal").classList.remove("hide-overflow");
             };
+        }
+
+        updateStats(){
+            console.log(this.projects)
+            let total= 0;
+            for (const [key, value] of Object.entries(this.projects)) {
+                let tag;
+                for(let i = 0; i<value.issues.length;i++){
+                    if (value.issues[i]){
+                        tag = value.issues[i].section;
+                    }else {
+                        tag = "none";
+                    }
+                    if(tag=="done"){total++}
+                }
+            }
+            
+            document.getElementById("total-span").innerHTML=total;
         }
 
     capitalize(str) {
